@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <a href="">返回</a>
+            <p>收货地址</p>
+        </header>
+        <main class="main">
+            <ul id="cont">
+                <%data.map(item=>{%>
+
+
+                    <li>
+                        <p>
+                            <span>
+                                <%= item.name%>
+                            </span>
+                            <span>
+                                <%= item.tel%>
+                            </span>
+                            <button>删除</button>
+                        </p>
+                        <p>
+                            <%= item.address%>
+                           <a href="/add?id=1"><span style="font-size: 30px;">&gt;</span></a>
+                        </p>
+                    </li>
+                    <%})%>
+            </ul>
+        </main>
+        <footer class="footer">
+            <a href="/add">
+                新建地址
+            </a>
+        </footer>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="./add.html">添加</a>
+    <ul class="cont" id="cont">
+        <li>
+            <b>id</b>
+            <b>用户名</b>
+            <b>电话号码</b>
+        </li>
+    </ul>
+</body>
+
+</html>
+<script src="./js/ajax.js"></script>
+<script>
+    //发出查看接口
+    ajax.get({
+            url: "/getList"
+        }).then(res => {
+            console.log(res)
+            render(res.data)
+        })
+        //因为动态渲染的删除按钮 事件委托
+    cont.onclick = function(e) {
+        let el = e.target;
+        if (el.className === "del") {
+            let flag = window.confirm("您确定要删除吗?")
+            if (!flag) { //不删除
+                return;
+            }
+            ajax.get({
+                url: "/removeInfo",
+                params: {
+                    id: el.dataset.id
+                }
+            }).then(res => {
+                console.log(res)
+                alert(res.msg)
+                if (res.code == 0) {
+                    location.reload()
+                }
+            })
+        }
+    }
+
+    //增加接口
+    //+= map渲染
+    function render(data) {
+        cont.innerHTML += data.map(item => {
+            return ` <li>
+            <b>${item.id}</b>
+            <b>${item.name}</b>
+            <b>${item.tel}</b>
+            <button data-id='${item.id}' class="del">删除</button>
+            <a href="./update.html?id=${item.id}"> <button class="update">修改</button></a>
+        </li>`
+        }).join("")
+    }
+</script>

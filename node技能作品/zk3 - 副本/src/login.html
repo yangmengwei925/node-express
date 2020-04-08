@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .wrapper span {
+            border: 1px solid #ccc;
+            margin-left: 10px;
+            color: red;
+            /* text-decoration: none; */
+        }
+        
+        .wrapper button {
+            width: 180px;
+            background: plum;
+            border-radius: 10px;
+            text-align: center;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <input type="text" placeholder="注册邮箱/手机号" id="useript"><br>
+        <input type="password" placeholder="登录密码" id="pwdipt"><br>
+        <input type="text" placeholder="验证码" id="codeipt"><span id="checksp"></span><br>
+        <button id="btn">登录</button>
+    </div>
+    <script src="./js/ajax.js"></script>
+    <script>
+        ajax.get({
+            url: "/checkcode"
+        }).then(res => {
+            checksp.innerHTML = res.chcode;
+        })
+        checksp.onclick = () => { //点击更换验证码
+            ajax.get({
+                url: "/checkcode"
+            }).then(res => {
+                checksp.innerHTML = res.chcode;
+            })
+        }
+        btn.onclick = () => { //点击登录按钮
+            if (codeipt.value === checksp.innerHTML) { //判断验证码是否正确
+                ajax.post({
+                    url: "/login",
+                    params: {
+                        name: `${useript.value}`,
+                        pwd: `${pwdipt.value}`
+                    }
+                }).then(res => {
+                    alert(res.msg)
+                    if (res.code == 1) {
+                        window.location.href = "welcome.html";
+                    }
+                })
+
+            } else {
+                alert("验证码输入错误")
+            }
+        }
+    </script>
+</body>
+
+</html>

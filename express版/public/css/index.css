@@ -1,0 +1,39 @@
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+html,body,.wrapper{
+    width: 100%;
+    height: 100%;
+}
+.wrapper{
+    display: flex;
+    flex-direction: column;
+}
+.main{
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+}
+.main li{
+    line-height: 40px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin: 10px;
+}
+.header,.footer{
+    line-height: 40px;
+    height: 40px;
+    width: 100%;
+    text-align: center;
+}
+.header p{
+    display: inline-block;
+}
+.header{
+    background: #ddd;
+}
+.footer{
+    background: orange;
+}

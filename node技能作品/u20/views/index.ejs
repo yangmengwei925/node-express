@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- <div class="header">微博正文</div> -->
+        <%data.map(item=>{%>
+            <div class="list">
+
+                <div class="content">
+                    <h4>
+                        <%=item.name%>
+                    </h4>
+                    <p>
+                        <%=item.time%>
+                    </p>
+                    <p>
+                        <%=item.cont%>
+                    </p>
+                </div>
+            </div>
+            <%})%>
+
+                <button id="add">新建微博</button>
+    </div>
+</body>
+
+</html>
+<script src="./js/ajax.js"></script>
+<script>
+    add.onclick = () => {
+        if (localStorage.getItem("user")) {
+            location.href = "add.html"
+        } else {
+            location.href = "login.html"
+        }
+    }
+</script>

@@ -1,0 +1,27 @@
+express必须下载的三个包
+1、express
+2、ejs
+3、body-parser
+
+做技能的六大步
+1、引入依赖 即下包
+2、实例化 new express
+
+7、
+app.use(bodyparser.urlencoded({extended:flase}))
+app.use(bodyparser.json())
+
+3、设置静态资源管理器 
+app.use("/public",express.static(path.join(__dirname+"/hehe")))
+4、配置ejs模板引擎
+app.engine("html",ejs.renderFile);
+app.set("views","./aabb");
+app.set("view engine","html")
+5、配置路由
+app.get("/",(req,res)=>{
+	res.render("index");//跳转到响应HTML页面
+})
+6、设置端口
+app.listen(9090,()=>{
+   log(9090)
+})

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <ul id="tit">
+            <li data-type="zx" data-id="zx" class="active">资讯</li>
+            <li>网页</li>
+        </ul>
+        <ul id="cont">
+
+        </ul>
+    </div>
+</body>
+
+</html>
+<script src="./js/axios.js"></script>
+<script>
+    let lis = document.querySelectorAll("#tit li");
+    //前端发出/getData路径请求 请求目的：向后台要资讯数据
+    axios.get("http://localhost:9090/getData").then(res => {
+        console.log(res)
+        render(res.data);
+    })
+    lis.forEach(function(li) {
+        li.onclick = function() {
+            document.querySelector(".active").classList.remove("active");
+            this.classList.add("active");
+            axios.get("http://localhost:9090/getData?type=" + this.dataset.type).then(res => {
+                console.log(res);
+                render(res.data);
+
+            })
+        }
+    })
+
+    function render(data) {
+        cont.innerHTML = data.map(item => {
+            return `<li>${item.tit}</li>`
+        }).join("")
+    }
+</script>
+<!-- <script src="./js/index.js"></script> -->

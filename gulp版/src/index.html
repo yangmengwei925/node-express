@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <ul>
+                <li>全部商品</li>
+                <li>降价商品</li>
+            </ul>
+        </header>
+        <main class="main">
+            <ul id="cont">
+                <li class="list">
+                    <ol>
+                        <li><input type="checkbox" name="" id=""></li>
+                        <li>标题</li>
+                        <li>介个</li>
+                        <li>
+                            <input type="number" value="1" min="0" max="10">
+                        </li>
+                        <li>
+                            zongji
+                        </li>
+                        <li>
+                            <span>删除</span>
+                            <span>收藏</span>
+                        </li>
+                    </ol>
+                </li>
+            </ul>
+        </main>
+        <footer class="footer">
+            <span>全选<input type="checkbox"></span>
+            <span>删除</span>
+            <span>移入收藏夹</span>
+            <span>总价：24234</span>
+        </footer>
+    </div>
+</body>
+</html>
+<script src="./js/libs/axios.js"></script>
+<script>
+    axios.get("/getShop").then(res=>{
+        console.log(res)
+    })
+</script>

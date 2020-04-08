@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="ipt"><button id="btn">搜索</button>
+    <ul id="list">
+
+    </ul>
+</body>
+
+</html>
+<script src="./js/ajax.js"></script>
+<script>
+    ajax.get({
+        url: "/getData"
+    }).then(res => {
+        render(res);
+    })
+    ipt.oninput = () => {
+        ajax.get({
+            url: "/search?val=" + ipt.value
+        }).then(res => {
+            render(res);
+        })
+    }
+
+    function render(data) {
+        list.innerHTML = data.map(item => `<li>${item.name}</li>`).join("");
+    }
+</script>

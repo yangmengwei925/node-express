@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="">
+        <label for="">用户名</label>
+        <input type="text" id="user">
+        <br>
+        <br>
+        <label for="">电话</label>
+        <input type="text" id="telname">
+        <br>
+        <br>
+        <input type="button" value="修改" id="btn">
+    </form>
+</body>
+
+</html>
+<script src="./js/ajax.js"></script>
+<script>
+    let str = location.search; //获取搜索字符串
+
+    let {
+        id
+    } = parse(str);
+    //取搜索字符串里边的id的一个方法 此方法是自己封装的
+    //此id是渲染a标签时传递过来的
+    console.log(parse(str).id);
+
+    //一进入修改页面 首先获取修改的数据
+    ajax.get({
+        url: "/getList",
+        params: {
+            id
+        }
+    }).then(res => {
+        console.log(res)
+        user.value = res.data[0].name
+        telname.value = res.data[0].tel
+    })
+
+    btn.onclick = function() {
+        ajax.post({
+            url: "/updateInfo",
+            params: {
+                id,
+                name: user.value,
+                tel: telname.value
+            }
+        }).then(res => {
+            alert(res.msg)
+            location.href = "index.html"
+        })
+    }
+
+    function parse(str) {
+        let arr = str.slice(1).split("=")
+        let obj = {}
+        obj[arr[0]] = arr[1]
+        return obj
+    }
+</script>

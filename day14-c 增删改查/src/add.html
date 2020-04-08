@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+   <form action="">
+       <label for="">用户名</label>
+       <input type="text" id="user">
+       <br>
+       <br>
+       <label for="">电话</label>
+       <input type="text" id="telname">
+       <br>
+       <br>
+       <input type="button" value="添加" id="btn">
+   </form> 
+</body>
+</html>
+<script src="./js/ajax.js"></script>
+<script>
+   btn.onclick = function(){
+       ajax.post({
+           url:"/addInfo",
+           params:{
+               name:user.value,
+               tel:telname.value
+           }
+       }).then(res=>{
+           console.log(res)
+           alert(res.msg)
+           if(res.code==0){
+               location.href = "index.html"
+           }
+       })
+   }
+</script>

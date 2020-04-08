@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="left">
+            <ul id="guanli">
+                <li>贷款订单</li>
+                <li>转单订单</li>
+                <li>保险订单</li>
+            </ul>
+        </div>
+        <div class="right">
+            <div class="header">
+                <label>金额范围：</label><input type="text" value="1" id="minNum">-<input type="text" value="20" id="maxNum">
+            </div>
+            <div class="nav">
+                <div class="zhtai"><span>处理状态:</span>
+                    <!-- 订单状态:0新订单 1未审核 2已接单 3已完成 4暂无状态 -->
+                    <ul id="stateul">
+                        <li class="active">全部</li>
+                        <li>新订单</li>
+                        <li>未审核</li>
+                        <li>已接单</li>
+                        <li>已完成</li>
+                        <li>暂无状态</li>
+                    </ul>
+                </div>
+                <div class="type">
+                    <span>转单类型：</span>
+                    <select id="typesel">
+                        <option>信用贷</option>
+                        <option>房乐贷</option>
+                        <option>车乐贷</option>
+                        <option>押房贷</option>
+                    </select>
+                </div>
+                <div class="kefu">
+                    <span>客服名称：</span>
+                    <input type="text" placeholder="请选择客服">
+                </div>
+                <button id="btn">查询</button>
+            </div>
+            <div class="list">
+                <table>
+                    <tr>
+                        <td>订单号</td>
+                        <td>下单时间</td>
+                        <td>用户名称</td>
+                        <td>手机号</td>
+                        <td>转单类型</td>
+                        <td>贷款金额（万元）</td>
+                        <td>订单状态</td>
+                    </tr>
+                    <tbody id="tbody">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="footer">
+                <p>共<span id="totalnum">30</span>条</p>
+                <b id="prevbtn" class="dis">&lt;</b>
+                <ul id="pagination">
+                    <!-- <li>1</li>
+                    <li>2</li>
+                    <li>3</li> -->
+                </ul>
+                <b id="nextbtn">&gt;</b>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="./js/ajax.js"></script>
+<script>
+    let page = 1, //第几页
+        limit = 5, //每页5条
+        total; //总页数
+    let set = 1; //保存订单类型的下标
+    function getData(m = 1, n = -1) { //m代表订单类型，n代表订单状态:-1全部,0新订单 1未审核 2已接单 3已完成 4暂无状态
+
+        ajax.get({
+            url: "/getList", //订单类型：1贷款，2转单，3保险
+            params: {
+                otype: m,
+                state: n,
+                page,
+                limit
+            }
+        }).then(res => {
+            render(res.data);
+            total = res.total; //获取服务端返回的总页数
+            totalnum.innerHTML = res.length; //总数据条数
+            let otype = res.otype, //订单类型
+                state = res.state; //处理状态
+
+            renderPagination(total); //渲染分页器
+            let ps = [...pagination.children];
+            ps.forEach((item, index) => { //点击换页
+                item.onclick = () => {
+                    page = index + 1;
+                    getData(otype, state)
+                }
+            })
+            prevbtn.onclick = () => { //点击上一页按钮
+                if (page == 1) { //是否第一页
+                    return;
+                }
+                page--;
+                getData(otype, state);
+            }
+            nextbtn.onclick = () => { //点击下一页按钮
+                if (page == total) { //是否最后一页
+                    return;
+                }
+                page++;
+                getData(otype, state);
+            }
+            let ltlis = [...guanli.children]; //订单管理
+            ltlis.forEach((item, index) => {
+                item.onclick = () => {
+                    page = 1
+                    set = index + 1;
+                    getData(index + 1)
+                }
+            })
+
+            let statelis = [...stateul.children]; //处理状态
+            statelis.forEach((item, index) => {
+                item.onclick = () => {
+                    page = 1
+                    getData(set, index - 1);
+                    stateul.querySelector(".active").classList.remove("active");
+                    item.classList.add("active")
+                }
+            })
+            btn.onclick = () => { //点击查询按钮
+                page = 1
+                getChaxun(otype, state);
+            }
+        })
+    }
+    getData();
+
+
+    function getChaxun(otype, state) {
+        let opts = [...typesel.children];
+        let n = typesel.selectedIndex; //选中的转单类型的下标
+        ajax.get({
+            url: '/chaxun',
+            params: {
+                page,
+                limit,
+                min: minNum.value, //最小金额
+                max: maxNum.value, //最大金额
+                type: opts[n].innerHTML, //转单类型
+                otype, //订单类型
+                state //处理状态
+            }
+        }).then(res => {
+            render(res.data);
+            total = res.total; //获取服务端返回的总页数
+            totalnum.innerHTML = res.length; //总数据条数
+            renderPagination(total); //渲染分页器
+            let ps = [...pagination.children];
+            ps.forEach((item, index) => {
+                item.onclick = () => { //点击换页
+                    page = index + 1;
+                    getChaxun(otype, state)
+                }
+            })
+            prevbtn.onclick = () => { //点击上一页按钮
+                if (page == 1) { //是否第一页
+                    return;
+                }
+                page--;
+                getChaxun(otype, state);
+            }
+            nextbtn.onclick = () => { //点击下一页按钮
+                if (page == total) { //是否最后一页
+                    return;
+                }
+                page++;
+                getChaxun(otype, state);
+            }
+        })
+    }
+
+    //渲染分页器
+    function renderPagination(total) {
+        if (page == 1) { //判断是否第一页
+            prevbtn.classList.add("dis");
+        } else {
+            prevbtn.classList.remove("dis");
+        }
+        if (page == total) { //判断是否最后一页
+            nextbtn.classList.add("dis");
+        } else {
+            nextbtn.classList.remove("dis");
+        }
+        let pagestr = "";
+        for (let i = 0; i < total; i++) {
+            pagestr += `<li>${i+1}</li>` //渲染分页器
+        }
+        pagination.innerHTML = pagestr;
+    }
+
+    //渲染数据
+    function render(data) {
+        tbody.innerHTML = data.map(item => `<tr>
+                        <td>${item.id}</td>
+                        <td>${item.date}</td>
+                        <td>${item.customerName}</td>
+                        <td>${item.phone}</td>
+                        <td>${item.type}</td>
+                        <td>${item.money}</td>
+                        <td>${item.str}</td>
+                    </tr>`).join("")
+    }
+</script>

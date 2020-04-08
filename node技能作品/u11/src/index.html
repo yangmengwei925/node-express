@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <h3>为你推荐</h3>
+        </div>
+        <div class="main">
+            <ul class="tab">
+                <li class="active">热门推荐</li>
+                <li>距离最近</li>
+                <li>最新上架</li>
+                <li>最近开演</li>
+            </ul>
+            <div class="content">
+                <dl><dt><img src="./img/1_r1_c1.jpg"></dt>
+                    <dd>阿加莎推理剧作</dd>
+                </dl>
+                <dl><dt><img src="./img/1_r3_c1.jpg"></dt>
+                    <dd>阿加莎推理剧作</dd>
+                </dl>
+                <dl><dt><img src="./img/1_r5_c1.jpg"></dt>
+                    <dd>阿加莎推理剧作</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <script src="./js/ajax.js"></script>
+    <script>
+        let tabs = document.querySelectorAll(".tab li");
+        let content = document.querySelector(".content");
+        ajax.get({
+            url: "/data?type=hot"
+        }).then(res => {
+            console.log(res);
+            render(res);
+        })
+        tabs[0].onclick = () => {
+            ajax.get({
+                url: "/data?type=hot"
+            }).then(res => {
+                console.log(res);
+                render(res);
+            })
+        }
+        tabs[1].onclick = () => {
+            ajax.get({
+                url: "/data?type=near"
+            }).then(res => {
+                console.log(res);
+                render(res);
+            })
+        }
+
+        function render(res) {
+            content.innerHTML = res.map(item => {
+                return `<dl><dt><img src="${item.img}"></dt>
+                    <dd>${item.title}</dd>
+                </dl>`
+            }).join("")
+        }
+    </script>
+</body>
+
+</html>

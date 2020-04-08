@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+        #add li {
+            line-height: 30px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <a href="">返回</a>
+            <p id="head">新建地址</p>
+        </header>
+        <main class="main">
+            <ul id="add">
+                <li>
+                    <label for="">收货人</label>
+                    <input type="text" id="username">
+                </li>
+                <li>
+                    <label for="">手机号</label>
+                    <input type="text" id="telname">
+                </li>
+                <li>
+                    <label for="">详细地址</label>
+                    <input type="text" id="addresname">
+                </li>
+            </ul>
+        </main>
+        <footer class="footer" id="btn">
+            保存地址
+        </footer>
+
+    </div>
+</body>
+
+</html>
+<script src="js/axios.js"></script>
+<script>
+    let id = location.search.slice(1).split("=")[1];
+    if (id) { //修改页面
+        head.innerHTML = "编辑地址";
+        axios.get("/update", {
+            params: {
+                id
+            }
+        }).then(res => {
+            console.log(res)
+            res = res.data[0];
+            username.value = res.name
+            telname.value = res.tel
+            addresname.value = res.address
+        })
+        //修改
+        btn.onclick = function(){
+            axios.post("/updateUser", {
+                id,
+                name: username.value,
+                tel: telname.value,
+                address: addresname.value
+            }).then(res => {
+                console.log(res)
+                alert(res.data.msg)
+                if (res.data.code == 0) {
+                    location.href = "/"
+                }
+            })
+        }
+
+    } else {//增加页面
+        let reg = /^1\d{5}$/;
+        btn.onclick = function () {
+            let flag = reg.test(telname.value);
+            // if(!flag){
+            //     alert("输入手机号格式有误");
+            //     return;
+            // }
+            axios.post("/addUser", {
+                name: username.value,
+                tel: telname.value,
+                address: addresname.value
+            }).then(res => {
+                console.log(res)
+                alert(res.data.msg)
+                if (res.data.code == 0) {
+                    location.href = "/"
+                }
+            })
+        }
+
+    }
+
+
+
+
+</script>

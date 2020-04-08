@@ -1,0 +1,70 @@
+1.  let  ,const与var
+let(变量)
+2. let 不重复
+3. 块级作用域
+4.不变量声明提升
+5.  let TDZ
+6. let 与顶级作用域无映射
+
+
+2 .const（常量（地址不变））
+
+
+3 左右结构保持一致
+
+  (1)数组：let arr=[1,2,3]
+         let[x,y,z]=arr
+
+
+      let  arr=[1,[2,[3]]]
+     let[,[,[x]]]=arr   x=3
+
+
+
+let arr=[un,[2,[3]]];  (默认值)
+  let[x=1,[2,[3]]]=arr  arr=un
+
+
+
+ ...res  剩余，展开
+let arr=[1,2,3,``````]
+let[x,...y]=arr
+x=1=arr[0] ,y=[2,3,.....]
+
+2.复制数组
+  let newArr=[...arr]=[1,2,3] 
+
+
+arr=[...arr1,...arr2]
+对象：
+3.别名 
+
+  1.键名
+  2.别名
+    let{age,telphonc:t}=obj
+3.合并
+
+
+let obj={...obj1,...obj2}
+
+4.默认
+  let obj{a:1,b:2,c:un}
+
+  let{a=3,b=4,c=5}=obj
+  {1,2,5}
+
+
+
+简写
+let obj={name：name；sum：function（）{}}
+      {name，sum（）{}}
+
+键名转变量：
+ 
+
+迭代
+every  
+some  
+map
+ filter 
+forEach

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="./add.html">添加</a>
+    <ul class="cont" id="cont">
+        <li>
+            <b>id</b>
+            <b>用户名</b>
+            <b>电话号码</b>
+        </li>
+    </ul>
+    <script src="./js/ajax.js"></script>
+    <script>
+        //发出查看接口
+        ajax.get({
+                url: "/getList"
+            }).then(res => {
+                console.log(res);
+                render(res.data)
+            })
+            //因为动态渲染的删除按钮 事件委托
+        cont.onclick = function(e) {
+            let el = e.target;
+            if (el.className == "del") {
+                let flag = window.confirm("您确定要删除吗?");
+                if (!flag) {
+                    return;
+                }
+                ajax.get({
+                    url: "/removeInfo",
+                    params: {
+                        id: el.dataset.id
+                    }
+                }).then(res => {
+                    console.log(res);
+                    alert(res.msg)
+                    if (res.code == 0) {
+                        location.reload()
+                    }
+                })
+            }
+        }
+    </script>
+</body>
+
+</html>
